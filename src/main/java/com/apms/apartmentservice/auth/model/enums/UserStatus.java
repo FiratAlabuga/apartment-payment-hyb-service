@@ -1,4 +1,10 @@
 package com.apms.apartmentservice.auth.model.enums;
 
-public class UserStatus {
+/**
+ * Enum representing the status of a user in the system.
+ */
+public enum UserStatus {
+    ACTIVE,
+    PASSIVE,
+    SUSPENDED
 }

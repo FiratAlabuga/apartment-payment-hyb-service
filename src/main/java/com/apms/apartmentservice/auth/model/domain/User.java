@@ -1,4 +1,79 @@
 package com.apms.apartmentservice.auth.model.domain;
 
-public class User {
+import com.apms.apartmentservice.auth.model.enums.TokenClaims;
+import com.apms.apartmentservice.auth.model.enums.UserStatus;
+import com.apms.apartmentservice.auth.model.enums.UserType;
+import com.apms.apartmentservice.common.model.domain.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Entity representing a user in the system.
+ * Inherits auditing fields from {@link BaseEntity} and includes identity, authentication,
+ * and user profile information. Also supports extracting JWT claims from user details.
+ */
+@Entity
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "USERS")
+public class User extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "USER_ID")
+    private String userId;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "PASSWORD")
+    private String password;
+
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+
+    @Column(name = "LAST_NAME")
+    private String lastName;
+
+    @Column(
+            name = "PHONE_NUMBER",
+            length = 20
+    )
+    private String phoneNumber;
+
+    @Column(name = "USER_TYPE")
+    private UserType userType;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus = UserStatus.ACTIVE;
+
+    /**
+     * Builds a map of JWT claims from the user's attributes.
+     * <p>
+     * These claims are used during token generation.
+     * </p>
+     *
+     * @return a map of JWT claim keys and their corresponding values
+     */
+    public Map<String, Object> getClaims() {
+        final Map<String, Object> claims = new HashMap<>();
+        claims.put(TokenClaims.USER_ID.getValue(), this.userId);
+        claims.put(TokenClaims.USER_TYPE.getValue(), this.userType);
+        claims.put(TokenClaims.USER_STATUS.getValue(), this.userStatus);
+        claims.put(TokenClaims.USER_FIRST_NAME.getValue(), this.firstName);
+        claims.put(TokenClaims.USER_LAST_NAME.getValue(), this.lastName);
+        claims.put(TokenClaims.USER_EMAIL.getValue(), this.email);
+        claims.put(TokenClaims.USER_PHONE_NUMBER.getValue(), this.phoneNumber);
+        return claims;
+    }
+
 }

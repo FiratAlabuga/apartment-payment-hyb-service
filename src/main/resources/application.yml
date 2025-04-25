@@ -1,0 +1,8 @@
+server:
+  port: 4321
+spring:
+  application:
+    name: apartment-service
+  profiles:
+    active: dev
+
