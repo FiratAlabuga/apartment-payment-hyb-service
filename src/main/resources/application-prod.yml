@@ -16,6 +16,10 @@ spring:
       hibernate:
         format_sql: false
 
+logging:
+  level:
+    root: WARN
+
 # SWAGGER
 springdoc:
   api-docs:

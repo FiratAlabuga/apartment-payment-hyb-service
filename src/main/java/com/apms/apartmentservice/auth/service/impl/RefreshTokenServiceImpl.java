@@ -27,7 +27,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
      * Generates a new access token using the provided refresh token.
      *
      * @param tokenRefreshRequest the request containing the refresh token
-     * @return a new {@link Token} containing the refreshed access and refresh tokens
+     * @return a new {@link TokenDTO} containing the refreshed access and refresh tokens
      */
     @Override
     public TokenDTO refreshToken(TokenRefreshRequest tokenRefreshRequest) {

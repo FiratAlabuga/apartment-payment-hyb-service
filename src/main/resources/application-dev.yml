@@ -1,20 +1,28 @@
+server:
+  port: ${PORT:4110}
+
 spring:
   application:
     name: apartment-service
-
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:apartment_db}
-    username: ${POSTGRES_USER:apartment_user}
-    password: ${POSTGRES_PASSWORD:apartment_pass}
+    url: jdbc:postgresql://${WORK_PERMISSION_DB_IP}:${WORK_PERMISSION_DB_PORT}/apartmentservicedatabase
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration: DEBUG
 
 # SWAGGER
 springdoc:
