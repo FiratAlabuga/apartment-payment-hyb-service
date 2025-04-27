@@ -74,3 +74,4 @@ public interface TokenService {
      * @return the token ID as a {@link String}
      */
     String getId(final String jwt);
+}
