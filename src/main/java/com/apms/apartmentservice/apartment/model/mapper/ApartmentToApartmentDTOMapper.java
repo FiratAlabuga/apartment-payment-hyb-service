@@ -23,7 +23,7 @@ public interface ApartmentToApartmentDTOMapper extends BaseMapper<Apartment, Apa
     List<ApartmentDTO> map(Collection<Apartment> sources);
 
     @Override
-    void updateEntity(Apartment entity, ApartmentDTO dto);
+    Apartment updateEntity(Apartment entity, ApartmentDTO dto);
 
     static ApartmentToApartmentDTOMapper initialize() {
         return Mappers.getMapper(ApartmentToApartmentDTOMapper.class);

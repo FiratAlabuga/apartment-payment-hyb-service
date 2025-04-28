@@ -26,8 +26,6 @@ import java.util.Map;
 @Table(name = "USERS")
 public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USER_ID")
     private String userId;
 

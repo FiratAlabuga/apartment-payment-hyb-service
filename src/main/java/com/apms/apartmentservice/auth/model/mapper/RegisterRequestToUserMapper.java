@@ -9,6 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface RegisterRequestToUserMapper extends BaseMapper<RegisterRequest, User> {
@@ -21,6 +22,7 @@ public interface RegisterRequestToUserMapper extends BaseMapper<RegisterRequest,
     @Named("mapForSaving")
     default User mapForSaving(RegisterRequest registerRequest) {
         return User.builder()
+                .userId(UUID.randomUUID().toString())
                 .email(registerRequest.getEmail())
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())

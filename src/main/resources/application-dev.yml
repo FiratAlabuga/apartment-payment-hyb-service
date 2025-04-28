@@ -5,9 +5,9 @@ spring:
   application:
     name: apartment-service
   datasource:
-    url: jdbc:postgresql://${WORK_PERMISSION_DB_IP}:${WORK_PERMISSION_DB_PORT}/apartmentservicedatabase
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:postgresql://localhost:3307/apartmentservicedatabase
+    username: your_database_username
+    password: your_database_password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

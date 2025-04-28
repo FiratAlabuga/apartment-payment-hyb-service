@@ -1,30 +1,18 @@
-# Stage 1: Build stage
-FROM gradle:8.0-jdk21 AS build
+# Stage 1: Build Stage
+FROM gradle:8.4.0-jdk21 AS build
 
-# Set working directory
 WORKDIR /app
-
-# Copy Gradle wrapper and build scripts
+COPY settings.gradle build.gradle ./
 COPY gradle gradle
-COPY build.gradle settings.gradle ./
-
-# Copy application source code
 COPY src src
 
-# Build the project (without running tests)
-RUN gradle build -x test
+RUN gradle build -x test --no-daemon
 
-# Stage 2: Run stage
+# Stage 2: Runtime Stage
 FROM amazoncorretto:21
 
-# Set working directory for the final container
 WORKDIR /apartment-service
-
-# Copy the built JAR file from the build stage
 COPY --from=build /app/build/libs/*.jar apartmentservice.jar
 
-# Expose the application port
 EXPOSE 4110
-
-# Set the entrypoint to run the JAR file
 ENTRYPOINT ["java", "-jar", "apartmentservice.jar"]

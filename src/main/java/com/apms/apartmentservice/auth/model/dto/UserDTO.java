@@ -17,7 +17,6 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @Setter
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class UserDTO extends BaseDTO {
     private String id;

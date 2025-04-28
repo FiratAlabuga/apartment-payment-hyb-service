@@ -40,7 +40,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .toString();
 
         final User userEntityFromDB = userRepository
-                .findById(adminId)
+                .findByUserId(adminId)
                 .orElseThrow(UserNotFoundException::new);
 
         this.validateAdminStatus(userEntityFromDB);

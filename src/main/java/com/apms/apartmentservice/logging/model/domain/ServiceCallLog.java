@@ -30,7 +30,7 @@ public class ServiceCallLog extends BaseEntity {
     private String method;
 
     @Enumerated(EnumType.STRING)
-    private HttpStatus status;
+    private HttpStatus httpStatus;
 
     private String userInfo;
 

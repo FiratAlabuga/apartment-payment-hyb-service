@@ -18,9 +18,6 @@ public interface PaymentDTOToPaymentMapper extends BaseMapper<PaymentDTO, Paymen
     @Override
     List<Payment> map(Collection<PaymentDTO> sources);
 
-    @Override
-    void updateEntity(PaymentDTO entity, Payment dto);
-
     static PaymentDTOToPaymentMapper initialize() {
         return Mappers.getMapper(PaymentDTOToPaymentMapper.class);
     }

@@ -9,8 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface ServiceCallLogRepository extends JpaRepository<ServiceCallLog, Long> {
-    // Custom query methods can be defined here if needed
-    // For example, you can add methods to find logs by specific criteria
-     Optional<ServiceCallLog> findByServiceName(String serviceName);
-     Optional<ServiceCallLog> findByStatus(String status);
+
 }

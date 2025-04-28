@@ -29,6 +29,7 @@ public class Apartment extends BaseEntity {
     private int totalUnits;
     private int availableUnits;
 
+    @Builder.Default
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Resident> residents = new ArrayList<>();
 

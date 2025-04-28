@@ -18,9 +18,6 @@ public interface ApartmentDTOToApartmentMapper extends BaseMapper<ApartmentDTO, 
     @Override
     List<Apartment> map(Collection<ApartmentDTO> sources);
 
-    @Override
-    void updateEntity(ApartmentDTO entity, Apartment dto);
-
     static ApartmentDTOToApartmentMapper initialize() {
         return Mappers.getMapper(ApartmentDTOToApartmentMapper.class);
     }

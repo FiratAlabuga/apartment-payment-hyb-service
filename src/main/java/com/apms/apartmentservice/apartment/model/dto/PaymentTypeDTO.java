@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @Setter
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class PaymentTypeDTO extends BaseDTO {
     private String paymentTypeId;

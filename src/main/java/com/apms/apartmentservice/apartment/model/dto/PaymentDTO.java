@@ -16,7 +16,6 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class PaymentDTO extends BaseDTO {
     private String paymentId;

@@ -77,7 +77,7 @@ public class ServiceCallLogAspectJ {
                     .method(request.getMethod())
                     .message(ex.getMessage())
                     .errorType(ex.getClass().getName())
-                    .status(HttpStatus.valueOf(getHttpStatusFromException(ex)))
+                    .httpStatus(HttpStatus.valueOf(getHttpStatusFromException(ex)))
                     .operation(joinPoint.getSignature().getName())
                     .response(ex.getMessage())
                     .build();
@@ -138,7 +138,7 @@ public class ServiceCallLogAspectJ {
             logEntity.setResponse(responseObject);
             logEntity.setMessage(responseObject);
             Optional.ofNullable(response).ifPresent(
-                    httpServletResponse -> logEntity.setStatus(
+                    httpServletResponse -> logEntity.setHttpStatus(
                             HttpStatus.valueOf(httpServletResponse.getStatus()
                             )
                     ));

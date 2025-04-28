@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 @Table(name = "RESIDENT")
 public class Resident extends BaseEntity {
     private String residentId;
-    private String apartmentId;
     private String name;
     private String surname;
     private String email;
@@ -27,6 +26,6 @@ public class Resident extends BaseEntity {
     private BigDecimal balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "apartment_id")
+    @JoinColumn(name = "apartmentId")
     private Apartment apartment;
 }

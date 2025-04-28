@@ -37,7 +37,5 @@ public interface BaseMapper<S, T> {
     List<T> map(Collection<S> sources);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(@MappingTarget S entity, T dto);
-
-    void updateEntity(PaymentDTO entity, Payment dto);
+    S updateEntity(@MappingTarget S entity, T dto);
 }

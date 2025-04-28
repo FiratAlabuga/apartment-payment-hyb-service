@@ -2,10 +2,7 @@ package com.apms.apartmentservice.common.model.domain;
 
 import com.apms.apartmentservice.auth.model.enums.TokenClaims;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,7 +30,7 @@ public class BaseEntity {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
 
     @Column(name = "CREATED_AT")
     @CreatedDate
@@ -51,6 +48,7 @@ public class BaseEntity {
     @LastModifiedBy
     private String updatedBy;
 
+    @Builder.Default
     @Column(name = "STATUS")
     private Boolean status = true;
 

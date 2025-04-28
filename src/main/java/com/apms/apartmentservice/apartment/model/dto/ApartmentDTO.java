@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @Setter
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class ApartmentDTO extends BaseDTO {
     private String apartmentId;
