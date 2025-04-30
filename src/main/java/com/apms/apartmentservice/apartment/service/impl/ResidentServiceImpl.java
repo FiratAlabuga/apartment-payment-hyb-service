@@ -2,8 +2,7 @@ package com.apms.apartmentservice.apartment.service.impl;
 
 import com.apms.apartmentservice.apartment.exception.ResidentNotFoundException;
 import com.apms.apartmentservice.apartment.model.dto.ResidentDTO;
-import com.apms.apartmentservice.apartment.model.mapper.ResidentDTOToResidentMapper;
-import com.apms.apartmentservice.apartment.model.mapper.ResidentToResidentDTOMapper;
+import com.apms.apartmentservice.apartment.model.mapper.ResidentMapper;
 import com.apms.apartmentservice.apartment.repository.ResidentRepository;
 import com.apms.apartmentservice.apartment.service.ResidentService;
 import jakarta.transaction.Transactional;
@@ -17,16 +16,15 @@ import java.util.List;
 @Transactional
 public class ResidentServiceImpl implements ResidentService {
     private final ResidentRepository residentRepository;
-    private final ResidentDTOToResidentMapper residentDTOToResidentMapper = ResidentDTOToResidentMapper.initialize();
-    private final ResidentToResidentDTOMapper residentToResidentDTOMapper = ResidentToResidentDTOMapper.initialize();
+    private final ResidentMapper residentMapper = ResidentMapper.initialize();
 
     @Override
     public ResidentDTO createResident(ResidentDTO residentDTO) {
         // Map the DTO to entity
-        var resident = residentDTOToResidentMapper.map(residentDTO);
+        var resident = residentMapper.toEntity(residentDTO);
         // Save the resident
         residentRepository.save(resident);
-        return residentToResidentDTOMapper.map(resident);
+        return residentMapper.toDto(resident);
     }
 
     @Override
@@ -34,7 +32,7 @@ public class ResidentServiceImpl implements ResidentService {
         // Find the resident by ID and map it to DTO
         var resident = residentRepository.findByResidentId(residentId)
                 .orElseThrow(() -> new ResidentNotFoundException(residentId));
-        return residentToResidentDTOMapper.map(resident);
+        return residentMapper.toDto(resident);
     }
 
     @Override
@@ -43,10 +41,10 @@ public class ResidentServiceImpl implements ResidentService {
         var existingResident = residentRepository.findByResidentId(residentId)
                 .orElseThrow(() -> new ResidentNotFoundException(residentId));
         // Map the updated fields from DTO to entity
-        residentDTOToResidentMapper.updateEntity(residentDTO, existingResident);
+        residentMapper.updateEntityFromDto(residentDTO, existingResident);
         // Save the updated resident
         residentRepository.save(existingResident);
-        return residentToResidentDTOMapper.map(existingResident);
+        return residentMapper.toDto(existingResident);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class ResidentServiceImpl implements ResidentService {
     public List<ResidentDTO> getAllResidents() {
         return residentRepository.findAll()
                 .stream()
-                .map(residentToResidentDTOMapper::map)
+                .map(residentMapper::toDto)
                 .toList();
     }
 }

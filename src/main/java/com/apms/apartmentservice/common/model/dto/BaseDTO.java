@@ -15,13 +15,14 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
 public abstract class BaseDTO {
-    protected String createdUser;
+    protected String createdBy;
     protected LocalDateTime createdAt;
-    protected String updatedUser;
+    protected String updatedBy;
     protected LocalDateTime updatedAt;
+    protected Boolean status;
+    protected Integer version;
 }

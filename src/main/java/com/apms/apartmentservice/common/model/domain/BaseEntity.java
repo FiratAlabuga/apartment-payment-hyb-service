@@ -48,8 +48,7 @@ public class BaseEntity {
     @LastModifiedBy
     private String updatedBy;
 
-    @Builder.Default
-    @Column(name = "STATUS")
+    @Column(name = "STATUS", nullable = false)
     private Boolean status = true;
 
     @Version
@@ -63,6 +62,9 @@ public class BaseEntity {
      */
     @PrePersist
     public void prePersist() {
+        if (this.status == null) {
+            this.status = true;
+        }
         this.createdBy = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(Authentication::getPrincipal)
                 .filter(user -> !"anonymousUser".equals(user))

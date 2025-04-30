@@ -1,6 +1,7 @@
 package com.apms.apartmentservice.apartment.model.dto;
 
 import com.apms.apartmentservice.common.model.dto.BaseDTO;
+import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +15,9 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @Setter
+@MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
 public class ApartmentDTO extends BaseDTO {
-    private String apartmentId;
     private String name;
     private String address;
     private String city;

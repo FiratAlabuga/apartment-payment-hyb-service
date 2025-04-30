@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/apartment")
@@ -38,7 +36,7 @@ public class ApartmentApiController {
     )
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create-apartment")
-    public BaseApiResponse<?> createApartment(@Validated ApartmentDTO apartmentDTO) {
+    public BaseApiResponse<?> createApartment(@Validated @RequestBody ApartmentDTO apartmentDTO) {
         ApartmentDTO apartment = apartmentService.createApartment(apartmentDTO);
         return BaseApiResponse.successOf(apartment);
     }
@@ -93,8 +91,8 @@ public class ApartmentApiController {
                     @ApiResponse(responseCode = "404", description = "Apartment not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/update-apartment")
-    public BaseApiResponse<?> updateApartment(String apartmentId, ApartmentDTO apartmentDTO) {
+    @PostMapping("/update-apartment/{apartmentId}")
+    public BaseApiResponse<?> updateApartment(@PathVariable(name = "apartmentId") String apartmentId, @Validated @RequestBody  ApartmentDTO apartmentDTO) {
         ApartmentDTO updatedApartment = apartmentService.updateApartment(apartmentId, apartmentDTO);
         return BaseApiResponse.successOf(updatedApartment);
     }

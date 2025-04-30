@@ -28,14 +28,11 @@ public interface BaseMapper<S, T> {
      */
     T map(S source);
 
-    /**
-     * Maps a collection of source objects to a list of target objects.
-     *
-     * @param sources the collection of source objects
-     * @return a list of mapped target objects
-     */
-    List<T> map(Collection<S> sources);
+
+    T toDto(S entity);
+
+    S toEntity(T dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    S updateEntity(@MappingTarget S entity, T dto);
+    void updateEntityFromDto(T dto, @MappingTarget S entity);
 }
