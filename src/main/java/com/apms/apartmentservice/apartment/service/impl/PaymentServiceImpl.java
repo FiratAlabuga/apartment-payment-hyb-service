@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,15 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDTO createPayment(PaymentDTO paymentDTO) {
         // Map the DTO to entity
         Payment payment = paymentMapper.toEntity(paymentDTO);
+        // Set the payment ID
+        setUniqueSignPayment(payment);
         paymentRepository.save(payment);
         return paymentMapper.toDto(payment);
+    }
+
+    private static void setUniqueSignPayment(Payment payment) {
+        payment.setPaymentId(UUID.randomUUID().toString());
+        payment.setTransactionId("TXN-"+ UUID.randomUUID().toString());
     }
 
     @Override

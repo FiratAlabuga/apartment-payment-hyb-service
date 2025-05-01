@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/payment")
@@ -36,9 +34,9 @@ public class PaymentApiController {
                     @ApiResponse(responseCode = "409", description = "Create Payment already exists")
             }
     )
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @PostMapping("/create-payment")
-    public BaseApiResponse<?> createPayment(@Validated PaymentDTO paymentDTO) {
+    public BaseApiResponse<?> createPayment(@Validated @RequestBody PaymentDTO paymentDTO) {
         PaymentDTO payment = paymentService.createPayment(paymentDTO);
         return BaseApiResponse.successOf(payment);
     }
@@ -55,10 +53,29 @@ public class PaymentApiController {
                     @ApiResponse(responseCode = "200", description = "Payment found"),
                     @ApiResponse(responseCode = "404", description = "Payment not found")
             })
-    @PostMapping("/get-payment")
+    @GetMapping("/get-payment/{paymentId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public BaseApiResponse<?> getPaymentById(String paymentId) {
+    public BaseApiResponse<?> getPaymentById(@PathVariable(name = "paymentId") String paymentId) {
         PaymentDTO payment = paymentService.getPaymentById(paymentId);
+        return BaseApiResponse.successOf(payment);
+    }
+    /**
+     * Endpoint to get a payment by ID.
+     *
+     * @param transactionId The ID of the payment to retrieve.
+     * @return A {@link BaseApiResponse} containing the payment details.
+     */
+    @Operation(
+            summary = "Get Payment by ID",
+            description = "Retrieve payment details by ID.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Payment found"),
+                    @ApiResponse(responseCode = "404", description = "Payment not found")
+            })
+    @GetMapping("/get-payment/transaction/{transactionId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public BaseApiResponse<?> getPaymentByTrxId(@PathVariable(name = "transactionId") String transactionId) {
+        PaymentDTO payment = paymentService.getPaymentByTransactionId(transactionId);
         return BaseApiResponse.successOf(payment);
     }
     /**
@@ -74,7 +91,7 @@ public class PaymentApiController {
                     @ApiResponse(responseCode = "404", description = "Payments not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/get-all-payments")
+    @GetMapping("/get-all-payments")
     public BaseApiResponse<?> getAllPayments() {
         return BaseApiResponse.successOf(paymentService.getAllPayments());
     }
@@ -93,8 +110,8 @@ public class PaymentApiController {
                     @ApiResponse(responseCode = "404", description = "Payment not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/update-payment")
-    public BaseApiResponse<?> updatePayment(String paymentId, PaymentDTO paymentDTO) {
+    @PatchMapping("/update-payment/{paymentId}")
+    public BaseApiResponse<?> updatePayment(@PathVariable(name = "paymentId") String paymentId, @Validated @RequestBody PaymentDTO paymentDTO) {
         PaymentDTO updatedPayment = paymentService.updatePayment(paymentId, paymentDTO);
         return BaseApiResponse.successOf(updatedPayment);
     }
@@ -112,7 +129,7 @@ public class PaymentApiController {
                     @ApiResponse(responseCode = "404", description = "Payment not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/delete-payment")
+    @DeleteMapping("/delete-payment")
     public BaseApiResponse<?> deletePayment(String paymentId) {
         paymentService.deletePayment(paymentId);
         return BaseApiResponse.SUCCESS;

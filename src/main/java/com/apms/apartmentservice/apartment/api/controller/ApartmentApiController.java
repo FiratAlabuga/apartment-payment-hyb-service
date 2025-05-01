@@ -54,8 +54,8 @@ public class ApartmentApiController {
                     @ApiResponse(responseCode = "404", description = "Apartment not found")
             })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @PostMapping("/get-apartment")
-    public BaseApiResponse<?> getApartmentById(String apartmentId) {
+    @GetMapping("/get-apartment/{apartmentId}")
+    public BaseApiResponse<?> getApartmentById(@PathVariable(name = "apartmentId") String apartmentId) {
         ApartmentDTO apartment = apartmentService.getApartmentById(apartmentId);
         return BaseApiResponse.successOf(apartment);
     }
@@ -72,7 +72,7 @@ public class ApartmentApiController {
                     @ApiResponse(responseCode = "404", description = "Apartments not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/get-all-apartments")
+    @GetMapping("/get-all-apartments")
     public BaseApiResponse<?> getAllApartments() {
         return BaseApiResponse.successOf(apartmentService.getAllApartments());
     }
@@ -91,7 +91,7 @@ public class ApartmentApiController {
                     @ApiResponse(responseCode = "404", description = "Apartment not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/update-apartment/{apartmentId}")
+    @PatchMapping("/update-apartment/{apartmentId}")
     public BaseApiResponse<?> updateApartment(@PathVariable(name = "apartmentId") String apartmentId, @Validated @RequestBody  ApartmentDTO apartmentDTO) {
         ApartmentDTO updatedApartment = apartmentService.updateApartment(apartmentId, apartmentDTO);
         return BaseApiResponse.successOf(updatedApartment);
@@ -110,7 +110,7 @@ public class ApartmentApiController {
                     @ApiResponse(responseCode = "404", description = "Apartment not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/delete-apartment")
+    @DeleteMapping("/delete-apartment")
     public BaseApiResponse<?> deleteApartment(String apartmentId) {
         boolean isDeleted = apartmentService.deleteApartment(apartmentId);
         return BaseApiResponse.successOf(isDeleted);

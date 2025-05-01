@@ -10,9 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/payment-type")
@@ -38,7 +36,7 @@ public class PaymentTypeApiController {
     )
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create-payment-type")
-    public BaseApiResponse<?> createPayment(@Validated PaymentTypeDTO paymentTypeDTO) {
+    public BaseApiResponse<?> createPayment(@Validated @RequestBody PaymentTypeDTO paymentTypeDTO) {
         PaymentTypeDTO paymentDTO = paymentTypeService.createPaymentType(paymentTypeDTO);
         return BaseApiResponse.successOf(paymentDTO);
     }
@@ -56,10 +54,27 @@ public class PaymentTypeApiController {
                     @ApiResponse(responseCode = "404", description = "Payment type not found")
             })
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @PostMapping("/get-payment-type")
-    public BaseApiResponse<?> getPaymentTypeById(String paymentTypeId) {
+    @GetMapping("/get-payment-type/{paymentTypeId}")
+    public BaseApiResponse<?> getPaymentTypeById(@PathVariable(name = "paymentTypeId") String paymentTypeId) {
         PaymentTypeDTO paymentTypeDTO = paymentTypeService.getPaymentTypeById(paymentTypeId);
         return BaseApiResponse.successOf(paymentTypeDTO);
+    }
+    /**
+     * Endpoint to get all payment types.
+     *
+     * @return A {@link BaseApiResponse} containing the list of all payment types.
+     */
+    @Operation(
+            summary = "Get All Payment Types",
+            description = "Retrieve all payment types.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Payments type found"),
+                    @ApiResponse(responseCode = "404", description = "Payments type not found")
+            })
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/get-all-payment-types")
+    public BaseApiResponse<?> getAllPayments() {
+        return BaseApiResponse.successOf(paymentTypeService.getAllPaymentTypes());
     }
     /**
      * Endpoint to update a payment type by ID.
@@ -77,8 +92,8 @@ public class PaymentTypeApiController {
                     @ApiResponse(responseCode = "404", description = "Payment type not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/update-payment-type")
-    public BaseApiResponse<?> updatePaymentType(String paymentTypeId, PaymentTypeDTO paymentTypeDTO) {
+    @PatchMapping("/update-payment-type/{paymentTypeId}")
+    public BaseApiResponse<?> updatePaymentType(@PathVariable(name = "paymentTypeId") String paymentTypeId, @Validated @RequestBody PaymentTypeDTO paymentTypeDTO) {
         PaymentTypeDTO updatedPaymentType = paymentTypeService.updatePaymentType(paymentTypeId, paymentTypeDTO);
         return BaseApiResponse.successOf(updatedPaymentType);
     }
@@ -96,7 +111,7 @@ public class PaymentTypeApiController {
                     @ApiResponse(responseCode = "404", description = "Payment type not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/delete-payment-type")
+    @DeleteMapping("/delete-payment-type")
     public BaseApiResponse<?> deletePaymentType(String paymentTypeId) {
         boolean isDeleted = paymentTypeService.deletePaymentType(paymentTypeId);
         return BaseApiResponse.successOf(isDeleted);

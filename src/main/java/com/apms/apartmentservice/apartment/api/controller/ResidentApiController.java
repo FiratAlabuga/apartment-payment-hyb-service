@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/resident")
@@ -37,7 +35,7 @@ public class ResidentApiController {
     )
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create-resident")
-    public BaseApiResponse<?> createResident(@Validated ResidentDTO residentDTO) {
+    public BaseApiResponse<?> createResident(@Validated @RequestBody ResidentDTO residentDTO) {
         ResidentDTO resident = residentService.createResident(residentDTO);
         return BaseApiResponse.successOf(resident);
     }
@@ -55,11 +53,28 @@ public class ResidentApiController {
                     @ApiResponse(responseCode = "200", description = "Resident found"),
                     @ApiResponse(responseCode = "404", description = "Resident not found")
             })
-    @PostMapping("/get-resident")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public BaseApiResponse<?> getResidentById(String residentId) {
+    @GetMapping("/get-resident/{residentId}")
+    public BaseApiResponse<?> getResidentById(@PathVariable(name = "residentId") String residentId) {
         ResidentDTO resident = residentService.getResidentById(residentId);
         return BaseApiResponse.successOf(resident);
+    }
+    /**
+     * Endpoint to get all residents.
+     *
+     * @return A {@link BaseApiResponse} containing the list of all residents.
+     */
+    @Operation(
+            summary = "Get All Residents",
+            description = "Retrieve all residents.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Residents found"),
+                    @ApiResponse(responseCode = "404", description = "Residents not found")
+            })
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/get-all-residents")
+    public BaseApiResponse<?> getAllPayments() {
+        return BaseApiResponse.successOf(residentService.getAllResidents());
     }
     /**
      * Endpoint to update a resident by ID.
@@ -76,8 +91,8 @@ public class ResidentApiController {
                     @ApiResponse(responseCode = "404", description = "Resident not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/update-resident")
-    public BaseApiResponse<?> updateResident(String residentId, ResidentDTO residentDTO) {
+    @PatchMapping("/update-resident/{residentId}")
+    public BaseApiResponse<?> updateResident(@PathVariable(name = "residentId") String residentId,@Validated @RequestBody ResidentDTO residentDTO) {
         ResidentDTO updatedResident = residentService.updateResident(residentId, residentDTO);
         return BaseApiResponse.successOf(updatedResident);
     }
@@ -95,7 +110,7 @@ public class ResidentApiController {
                     @ApiResponse(responseCode = "404", description = "Resident not found")
             })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/delete-resident")
+    @DeleteMapping("/delete-resident")
     public BaseApiResponse<?> deleteResident(String residentId) {
         boolean isDeleted = residentService.deleteResident(residentId);
         return BaseApiResponse.successOf(isDeleted);
